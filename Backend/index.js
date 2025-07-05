@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 
 import connectDB from './config/db.config.js'
 import authenticationRoute from './routes/auth.routes.js'
+import financialRoute from './routes/financial.routes.js'
 
 dotenv.config()
 connectDB()
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/auth', authenticationRoute)
+app.use('/financial', financialRoute)
 
 // Corrected the order of parameters: req comes before res
 app.get('/', (req, res) => {
