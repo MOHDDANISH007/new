@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import connectDB from './config/db.config.js'
 import authenticationRoute from './routes/auth.routes.js'
 import financialRoute from './routes/financial.routes.js'
+import chatRoute from './routes/chat.routes.js'
 
 dotenv.config()
 connectDB()
@@ -17,6 +18,7 @@ app.use(cookieParser())
 
 app.use('/auth', authenticationRoute)
 app.use('/financial', financialRoute)
+app.use('/chat', chatRoute)
 
 // Corrected the order of parameters: req comes before res
 app.get('/', (req, res) => {
