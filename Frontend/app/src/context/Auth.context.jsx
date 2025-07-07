@@ -74,6 +74,8 @@ export const AuthProvider = ({ children }) => {
       )
 
       setUser(res.data.user)
+     
+      navigate.reload()
       navigate('/document')
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
