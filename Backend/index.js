@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
-
 import connectDB from './config/db.config.js'
 import authenticationRoute from './routes/auth.routes.js'
 import financialRoute from './routes/financial.routes.js'
@@ -19,7 +18,10 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(
   cors({
-    origin: ['http://localhost:5173' , 'https://riseandhackparishackathon-frontend.onrender.com'],
+    origin: [
+      'http://localhost:5173',
+      'https://riseandhackparishackathon-frontend.onrender.com'
+    ],
     credentials: true
   })
 )

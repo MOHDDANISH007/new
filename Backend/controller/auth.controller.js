@@ -9,10 +9,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret'
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production', // Only true on Render or HTTPS
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  path: '/', // important for routing
-  maxAge: 24 * 60 * 60 * 1000 // 1 day
+  secure: false, // TEMP: disable secure in local
+  sameSite: 'lax',
+  path: '/',
+  maxAge: 24 * 60 * 60 * 1000
 }
 
 export async function signupController (req, res) {

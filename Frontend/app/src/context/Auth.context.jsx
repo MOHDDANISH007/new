@@ -12,7 +12,20 @@ export const AuthProvider = ({ children }) => {
 
   const BASE_URL = 'https://riseandhackparishackathon.onrender.com'
 
-  // 🔐 Check if user is authenticated on app load
+  // 🔁 Reusable function to fetch user
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/auth/user`, {
+        withCredentials: true
+      })
+      setUser(res.data.user)
+    } catch (err) {
+      console.error('Error fetching user:', err)
+      setUser(null)
+    }
+  }
+
+  // 🔐 Check login status on app load
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -21,10 +34,7 @@ export const AuthProvider = ({ children }) => {
         })
 
         if (res.data.loggedIn) {
-          const userRes = await axios.get(`${BASE_URL}/auth/user`, {
-            withCredentials: true
-          })
-          setUser(userRes.data.user)
+          await fetchUser()
         } else {
           setUser(null)
           navigate('/login')
@@ -38,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     checkAuthStatus()
-  }, [navigate]) // ⛔ Don't forget dependency
+  }, [navigate])
 
   // 📝 Signup
   const signup = async (name, email, password) => {
@@ -46,14 +56,15 @@ export const AuthProvider = ({ children }) => {
       setLoading(true)
       setError(null)
 
-      const res = await axios.post(
+      await axios.post(
         `${BASE_URL}/auth/signup`,
         { name, email, password },
         { withCredentials: true }
       )
 
-      setUser(res.data.user)
-      navigate('/document')
+      await fetchUser()
+      navigate('/document', { replace: true })
+      window.location.reload()
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed')
     } finally {
@@ -67,16 +78,15 @@ export const AuthProvider = ({ children }) => {
       setLoading(true)
       setError(null)
 
-      const res = await axios.post(
+      await axios.post(
         `${BASE_URL}/auth/signin`,
         { email, password },
         { withCredentials: true }
       )
 
-      setUser(res.data.user)
-     
-      navigate.reload()
-      navigate('/document')
+      await fetchUser()
+      navigate('/document', { replace: true })
+      window.location.reload()
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
     } finally {
