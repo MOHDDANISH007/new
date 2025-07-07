@@ -20,7 +20,7 @@ const GroqAndLlama = () => {
   const [loading, setLoading] = useState(false)
   const messageEndRef = useRef(null)
 
-  const BASE_URL = 'https://riseandhackparishackathon.onrender.com'
+  const BASE_URL = 'http://localhost:5000'
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
