@@ -7,28 +7,30 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true) // Start with loading true
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const BASE_URL = 'https://riseandhackparishackathon.onrender.com'
 
+  // 🔐 Check if user is authenticated on app load
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/auth/check`, {
+        const res = await axios.get(`${BASE_URL}/auth/check`, {
           withCredentials: true
         })
 
-        if (response.data.loggedIn) {
-          const userResponse = await axios.get(`${BASE_URL}/auth/user`, {
+        if (res.data.loggedIn) {
+          const userRes = await axios.get(`${BASE_URL}/auth/user`, {
             withCredentials: true
           })
-          setUser(userResponse.data.user)
+          setUser(userRes.data.user)
         } else {
-          navigate('/login')
           setUser(null)
+          navigate('/login')
         }
-      } catch (error) {
+      } catch (err) {
+        console.error('Auth check failed:', err)
         setUser(null)
       } finally {
         setLoading(false)
@@ -36,55 +38,57 @@ export const AuthProvider = ({ children }) => {
     }
 
     checkAuthStatus()
-  }, [])
+  }, [navigate]) // ⛔ Don't forget dependency
 
+  // 📝 Signup
   const signup = async (name, email, password) => {
     try {
       setLoading(true)
       setError(null)
-      const response = await axios.post(
+
+      const res = await axios.post(
         `${BASE_URL}/auth/signup`,
         { name, email, password },
         { withCredentials: true }
       )
-      setUser(response.data.user)
-      window.location.reload()
-      navigate('/')
-      // Refresh the page after short delay to ensure navigation completes
-    } catch (error) {
-      setError(error.response?.data?.error || 'Signup failed')
+
+      setUser(res.data.user)
+      navigate('/document')
+    } catch (err) {
+      setError(err.response?.data?.error || 'Signup failed')
     } finally {
       setLoading(false)
     }
   }
 
+  // 🔑 Signin
   const signin = async (email, password) => {
     try {
       setLoading(true)
       setError(null)
-      const response = await axios.post(
+
+      const res = await axios.post(
         `${BASE_URL}/auth/signin`,
         { email, password },
         { withCredentials: true }
       )
-      setUser(response.data.user)
-      window.location.reload()
-      navigate('document')
 
-      // Refresh the page after short delay to ensure navigation completes
-    } catch (error) {
-      setError(error.response?.data?.error || 'Login failed')
+      setUser(res.data.user)
+      navigate('/document')
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed')
     } finally {
       setLoading(false)
     }
   }
 
+  // 🚪 Signout
   const signout = async () => {
     try {
       await axios.get(`${BASE_URL}/auth/signout`, { withCredentials: true })
       setUser(null)
       navigate('/login')
-    } catch (error) {
+    } catch (err) {
       setError('Logout failed')
     }
   }
@@ -105,5 +109,3 @@ export const useAuth = () => {
   }
   return context
 }
-
-// Remove any default export - only use named exports
