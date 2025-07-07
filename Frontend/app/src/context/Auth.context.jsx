@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const BASE_URL = 'http://localhost:5000'
+  const BASE_URL = 'https://new-backend-w5z3.onrender.com'
 
   // 🔁 Reusable function to fetch user
   const fetchUser = async () => {

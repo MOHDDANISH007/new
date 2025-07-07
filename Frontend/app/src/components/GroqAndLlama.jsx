@@ -20,7 +20,7 @@ const GroqAndLlama = () => {
   const [loading, setLoading] = useState(false)
   const messageEndRef = useRef(null)
 
-  const BASE_URL = 'http://localhost:5000'
+  const BASE_URL = 'https://new-backend-w5z3.onrender.com'
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
