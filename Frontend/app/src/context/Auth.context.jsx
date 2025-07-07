@@ -20,12 +20,9 @@ export const AuthProvider = ({ children }) => {
         })
 
         if (response.data.loggedIn) {
-          const userResponse = await axios.get(
-            `${BASE_URL}/auth/user`,
-            {
-              withCredentials: true
-            }
-          )
+          const userResponse = await axios.get(`${BASE_URL}/auth/user`, {
+            withCredentials: true
+          })
           setUser(userResponse.data.user)
         } else {
           navigate('/login')
@@ -51,9 +48,9 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       )
       setUser(response.data.user)
+      window.location.reload()
       navigate('/')
       // Refresh the page after short delay to ensure navigation completes
-      setTimeout(() => window.location.reload(), 100)
     } catch (error) {
       setError(error.response?.data?.error || 'Signup failed')
     } finally {
