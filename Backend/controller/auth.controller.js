@@ -8,9 +8,9 @@ dotenv.config()
 const JWT_SECRET = process.env.JWT_SECRET || 'your_fallback_secret_key'
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 24 * 60 * 60 * 1000 // 1 day
+  secure: false, // set to true only in production with HTTPS
+  sameSite: 'Lax',
+  maxAge: 24 * 60 * 60 * 1000
 }
 
 export async function signupController (req, res) {

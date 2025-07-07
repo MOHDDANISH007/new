@@ -10,18 +10,18 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true) // Start with loading true
   const [error, setError] = useState(null)
 
-  const BASE_URL = 'http://localhost:5000'
+  const BASE_URL = 'https://riseandhackparishackathon.onrender.com'
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/auth/check', {
+        const response = await axios.get(`${BASE_URL}/auth/check`, {
           withCredentials: true
         })
 
         if (response.data.loggedIn) {
           const userResponse = await axios.get(
-            'http://localhost:5000/auth/user',
+            `${BASE_URL}/auth/user`,
             {
               withCredentials: true
             }

@@ -20,6 +20,8 @@ const GroqAndLlama = () => {
   const [loading, setLoading] = useState(false)
   const messageEndRef = useRef(null)
 
+  const BASE_URL = 'https://riseandhackparishackathon.onrender.com'
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -51,7 +53,7 @@ const GroqAndLlama = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/chat/chat_with_ai',
+        `${BASE_URL}/chat/chat_with_ai`,
         {
           userId: user._id,
           conversationMessage: input

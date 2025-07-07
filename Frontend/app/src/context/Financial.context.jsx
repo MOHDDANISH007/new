@@ -6,7 +6,7 @@ const FinancialContext = createContext()
 export const FinancialProvider = ({ children }) => {
   const [financialData, setFinancialData] = useState(null) // Use `null` for object
 
-  const BASE_URL = `http://localhost:5000`
+  const BASE_URL = `https://riseandhackparishackathon.onrender.com`
 
   useEffect(() => {
     const fetchFinancialData = async () => {
