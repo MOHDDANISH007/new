@@ -33,20 +33,17 @@ router.post('/chat_with_ai', isAuthenticated, async (req, res) => {
     // ✅ Fetch user's financial data
     const userFinancial = await financialData.findOne({ userId })
 
-    // Optional: Handle if financial data is missing
-    if (!userFinancial) {
-      return res.status(404).json({ error: 'Financial data not found' })
-    }
+    let financialSummary = 'No financial data provided by user'
 
-    // ✅ Format financial data into readable string
-    // ✅ Format financial data into readable string
-    const financialSummary = `
+    if (userFinancial) {
+      // Only format financial data if it exists
+      financialSummary = `
 ### Financial Overview ###
 
 ## Income:
 - Monthly Income: ₹${userFinancial.income.monthly} (₹${
-      userFinancial.income.yearly
-    } yearly)
+        userFinancial.income.yearly
+      } yearly)
 - Income Sources:
 ${userFinancial.income.sources
   .map(source => `  - ${source.name}: ₹${source.amount} (${source.type})`)
@@ -100,33 +97,33 @@ ${userFinancial.liabilities.creditCards
 
 ## Financial Health Indicators:
 - Credit Score: ${userFinancial.creditScore.value} (Last Updated: ${new Date(
-      userFinancial.creditScore.lastUpdated
-    ).toLocaleDateString()})
+        userFinancial.creditScore.lastUpdated
+      ).toLocaleDateString()})
 - Emergency Fund: ₹${userFinancial.emergencyFund.amount} (Covers ${
-      userFinancial.emergencyFund.monthsCovered
-    } months)
+        userFinancial.emergencyFund.monthsCovered
+      } months)
 - Net Worth: ₹${(
-      userFinancial.assets.bankAccounts.reduce(
-        (sum, acc) => sum + acc.balance,
-        0
-      ) +
-      userFinancial.assets.investments.reduce(
-        (sum, inv) => sum + inv.value,
-        0
-      ) +
-      userFinancial.assets.realEstate.reduce(
-        (sum, prop) => sum + prop.balance,
-        0
-      ) -
-      userFinancial.liabilities.loans.reduce(
-        (sum, loan) => sum + loan.balance,
-        0
-      ) -
-      userFinancial.liabilities.creditCards.reduce(
-        (sum, card) => sum + card.outstanding,
-        0
-      )
-    ).toLocaleString()}
+        userFinancial.assets.bankAccounts.reduce(
+          (sum, acc) => sum + acc.balance,
+          0
+        ) +
+        userFinancial.assets.investments.reduce(
+          (sum, inv) => sum + inv.value,
+          0
+        ) +
+        userFinancial.assets.realEstate.reduce(
+          (sum, prop) => sum + prop.balance,
+          0
+        ) -
+        userFinancial.liabilities.loans.reduce(
+          (sum, loan) => sum + loan.balance,
+          0
+        ) -
+        userFinancial.liabilities.creditCards.reduce(
+          (sum, card) => sum + card.outstanding,
+          0
+        )
+      ).toLocaleString()}
 
 ## Financial Goals:
 ${userFinancial.goals
@@ -141,6 +138,8 @@ ${userFinancial.goals
 - Investment Horizon: ${userFinancial.riskProfile.investmentHorizon}
 - Financial Knowledge: ${userFinancial.riskProfile.financialKnowledge}
 `
+    }
+
     console.log('Financial Summary:', financialSummary)
 
     // ✅ Create conversation
@@ -176,5 +175,4 @@ ${userFinancial.goals
     res.status(500).json({ error: 'Something went wrong' })
   }
 })
-
 export default router

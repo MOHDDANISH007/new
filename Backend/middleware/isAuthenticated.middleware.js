@@ -1,21 +1,18 @@
 import jwt from 'jsonwebtoken'
-import express from 'express'
-import dotenv from 'dotenv'
 
-dotenv.config()
+const isAuthenticated = (req, res, next) => {
+  const token = req.cookies.token
 
-const isAuthenticated = async (req, res, next) => {
-  const token = req.cookies.token // <-- Get token from cookie
-  console.log('token : ', token)
   if (!token) {
-    return res.status(401).json({ error: 'Please login first' })
+    return res.status(401).json({ error: 'Unauthorized' })
   }
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = decoded // ✅ Set req.user
+    req.user = decoded // ✅ no extra nesting
     next()
   } catch (err) {
-    return res.status(403).json({ message: 'Invalid token' })
+    return res.status(401).json({ error: 'Invalid token' })
   }
 }
 
