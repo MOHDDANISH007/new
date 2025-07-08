@@ -18,8 +18,7 @@ import {
   MdAccountBalance
 } from 'react-icons/md'
 import { motion } from 'framer-motion'
-import { Link, useNavigate  } from 'react-router-dom' // ✅ CORRECT
-
+import { Link, useNavigate } from 'react-router-dom' // ✅ CORRECT
 
 const Setting = () => {
   const { financialData } = useFinancial()
@@ -36,7 +35,7 @@ const Setting = () => {
   }
 
   const handleAddFinancialData = () => {
-    navigate('form')
+    navigate('/form') // <-- absolute path, not relative
   }
 
   const formatDate = dateString => {
