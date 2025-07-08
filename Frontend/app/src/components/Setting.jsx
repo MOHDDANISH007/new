@@ -116,7 +116,7 @@ const Setting = () => {
             We couldn't find any financial data associated with your account.
             Please add your financial information to get started.
           </p>
-          <Link to='/form'>
+          <Link to='form'>
             <button className='bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition'>
               Add Financial Data
             </button>
