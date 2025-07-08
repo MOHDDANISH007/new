@@ -15,7 +15,7 @@ const navItems = [
   { path: '/setting', icon: null, label: 'Settings', IconComponent: Settings }
 ]
 
-const SiderBar = ({ isAuthenticated = false }) => {
+const SiderBar = ({ count, setCount,  isAuthenticated = false  }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { signout } = useAuth() // Use the signout function from your auth context
   const navigate = useNavigate()
@@ -23,6 +23,7 @@ const SiderBar = ({ isAuthenticated = false }) => {
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
+    setCount(0)
     try {
       await signout() // Call the signout function from your auth context
       // The auth context will handle the navigation and state clearing

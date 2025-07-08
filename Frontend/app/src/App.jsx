@@ -11,7 +11,7 @@ const App = () => {
   const [count, setCount] = React.useState(0)
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
-      <SiderBar isAuthenticated={!!user} />
+      <SiderBar count={count} setCount={setCount} isAuthenticated={!!user} />
       {user && count === 0 && (
         <motion.div
           initial={{ x: -100, opacity: 0 }}
