@@ -12,10 +12,10 @@ const App = () => {
 
   // Redirect to "/" after login, but NOT if already on another route like "/document"
   useEffect(() => {
-    if (!user && location.pathname === '/login') {
+    if (!user) {
       navigate('/login')
     }
-  }, [user, location.pathname, navigate])
+  }, [user,navigate])
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex'>
