@@ -12,16 +12,28 @@ const App = () => {
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
       <SiderBar isAuthenticated={!!user} />
       {count === 0 && (
-        <div>
-          <WelcomeSection count={count} setCount={setCount} />
-        </div>
+        <motion.div
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div>
+            <WelcomeSection count={count} setCount={setCount} />
+          </div>
+        </motion.div>
       )}
       {/* Main Content Area */}
-      <div className={user ? 'lg:ml-64' : ''}>
-        <div className='min-h-screen flex items-center justify-center p-4'>
-          <Outlet />
+      <motion.div
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className={user ? 'lg:ml-64' : ''}>
+          <div className='min-h-screen flex items-center justify-center p-4'>
+            <Outlet />
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
