@@ -38,9 +38,9 @@ const AI_documentation = () => {
             🚀 Our Solution
           </h2>
           <p className='text-gray-700'>
-            Our AI Assistant connects to your financial data using Fi’s MCP
-            (Model Context Protocol). It offers smart, personalized answers
-            like:
+            Our AI Assistant connects to your financial data using our upcoming{' '}
+            <strong>Server MCP (Model Context Protocol)</strong>. It offers
+            smart, personalized answers like:
           </p>
           <ul className='list-disc list-inside mt-3 text-gray-600 space-y-1'>
             <li>“Can I afford a car EMI of ₹25,000?”</li>
@@ -83,7 +83,7 @@ const AI_documentation = () => {
             <BsShieldLock className='text-3xl text-red-600 mb-3 mx-auto' />
             <h3 className='font-semibold text-red-700'>Secure Data</h3>
             <p className='text-gray-600 text-sm'>
-              MCP auto-fetches & encrypts your data
+              Server MCP auto-fetches & encrypts your data
             </p>
           </div>
         </div>
@@ -96,11 +96,11 @@ const AI_documentation = () => {
         </h2>
         <p className='text-gray-700 max-w-2xl mx-auto mb-4'>
           To unlock personalized AI guidance, please fill out the financial
-          credentials form. But don't worry — thanks to our integration with
-          Fi's <strong>MCP</strong>, most data (like your income, expenses,
-          loans, and assets) is{' '}
-          <span className='font-semibold text-green-600'>auto-fetched</span>.
-          You won’t need to enter everything manually.
+          credentials form. But don't worry — thanks to our upcoming{' '}
+          <strong>Server MCP</strong>, most data (like your income, expenses,
+          loans, and assets) will be{' '}
+          <span className='font-semibold text-green-600'>auto-fetched</span>{' '}
+          from your accounts securely.
         </p>
         <p className='text-sm text-gray-600 italic'>
           Your data stays encrypted and secure. We use it only to serve you
