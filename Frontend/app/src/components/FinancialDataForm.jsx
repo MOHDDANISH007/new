@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/Auth.context'
-import axios from 'axios'
 import {
   FiDollarSign,
   FiHome,
@@ -11,10 +9,13 @@ import {
   FiTrash2
 } from 'react-icons/fi'
 import { MdOutlineRealEstateAgent, MdAccountBalance } from 'react-icons/md'
+import Link from 'react-router-dom'
 
 const FinancialDataForm = () => {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const BASE_URL = 'https://new-backend-w5z3.onrender.com'
   const [formData, setFormData] = useState({
     income: {
       monthly: '',
@@ -67,8 +68,6 @@ const FinancialDataForm = () => {
       lastUpdated: ''
     }
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
 
   const handleChange = (section, field, value, index = null) => {
     if (index !== null) {
@@ -291,8 +290,856 @@ const FinancialDataForm = () => {
               </button>
             </div>
 
-            {/* Rest of your form sections (Expenses, Assets, Liabilities, Credit Score) */}
-            {/* ... Keep all your existing form sections exactly as they are ... */}
+            {/* Expenses Section */}
+            <div className='mb-8 p-4 border border-gray-200 rounded-lg'>
+              <h2 className='text-xl font-semibold flex items-center gap-2 mb-4 text-indigo-600'>
+                <FiCreditCard /> Expense Details
+              </h2>
+
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                  Monthly Expenses (₹)*
+                </label>
+                <input
+                  type='number'
+                  className='w-full p-2 border border-gray-300 rounded-md'
+                  value={formData.expenses.monthly}
+                  onChange={e =>
+                    handleChange('expenses', 'monthly', e.target.value)
+                  }
+                  required
+                />
+              </div>
+
+              <h3 className='font-medium text-gray-800 mb-3'>
+                Expense Categories*
+              </h3>
+              {formData.expenses.categories.map((category, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Category Name*
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={category.name}
+                        onChange={e =>
+                          handleChange(
+                            'expenses',
+                            'categories',
+                            { name: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Amount (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={category.amount}
+                        onChange={e =>
+                          handleChange(
+                            'expenses',
+                            'categories',
+                            { amount: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Type*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={category.type}
+                        onChange={e =>
+                          handleChange(
+                            'expenses',
+                            'categories',
+                            { type: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select type</option>
+                        <option value='housing'>Housing</option>
+                        <option value='food'>Food</option>
+                        <option value='transport'>Transport</option>
+                        <option value='utilities'>Utilities</option>
+                        <option value='entertainment'>Entertainment</option>
+                        <option value='debt'>Debt Payment</option>
+                        <option value='other'>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  {formData.expenses.categories.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() =>
+                        removeItem('expenses', 'categories', index)
+                      }
+                    >
+                      <FiTrash2 size={14} /> Remove Category
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2'
+                onClick={() =>
+                  addItem('expenses', 'categories', {
+                    name: '',
+                    amount: '',
+                    type: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Expense Category
+              </button>
+            </div>
+
+            {/* Assets Section */}
+            <div className='mb-8 p-4 border border-gray-200 rounded-lg'>
+              <h2 className='text-xl font-semibold flex items-center gap-2 mb-4 text-indigo-600'>
+                <FiTrendingUp /> Assets
+              </h2>
+
+              {/* Bank Accounts */}
+              <h3 className='font-medium text-gray-800 mb-3 flex items-center gap-2'>
+                <MdAccountBalance /> Bank Accounts
+              </h3>
+              {formData.assets.bankAccounts.map((account, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Account Name*
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={account.name}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'bankAccounts',
+                            { name: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Balance (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={account.balance}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'bankAccounts',
+                            { balance: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Account Type*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={account.type}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'bankAccounts',
+                            { type: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select type</option>
+                        <option value='savings'>Savings</option>
+                        <option value='current'>Current</option>
+                        <option value='fixed deposit'>Fixed Deposit</option>
+                        <option value='other'>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                  {formData.assets.bankAccounts.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() =>
+                        removeItem('assets', 'bankAccounts', index)
+                      }
+                    >
+                      <FiTrash2 size={14} /> Remove Account
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2 mb-6'
+                onClick={() =>
+                  addItem('assets', 'bankAccounts', {
+                    name: '',
+                    balance: '',
+                    type: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Bank Account
+              </button>
+
+              {/* Investments */}
+              <h3 className='font-medium text-gray-800 mb-3 flex items-center gap-2'>
+                <FiTrendingUp /> Investments
+              </h3>
+              {formData.assets.investments.map((investment, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Investment Name*
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.name}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { name: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Type*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.type}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { type: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select type</option>
+                        <option value='MF'>Mutual Fund</option>
+                        <option value='Stocks'>Stocks</option>
+                        <option value='Bonds'>Bonds</option>
+                        <option value='FD'>Fixed Deposit</option>
+                        <option value='PPF'>PPF</option>
+                        <option value='other'>Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Current Value (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.value}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { value: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Return Rate (%)*
+                      </label>
+                      <input
+                        type='number'
+                        step='0.1'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.returnRate}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { returnRate: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Duration
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.duration}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { duration: e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Risk Level*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={investment.risk}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'investments',
+                            { risk: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select risk</option>
+                        <option value='low'>Low</option>
+                        <option value='medium'>Medium</option>
+                        <option value='high'>High</option>
+                      </select>
+                    </div>
+                  </div>
+                  {formData.assets.investments.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() => removeItem('assets', 'investments', index)}
+                    >
+                      <FiTrash2 size={14} /> Remove Investment
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2 mb-6'
+                onClick={() =>
+                  addItem('assets', 'investments', {
+                    name: '',
+                    type: '',
+                    value: '',
+                    returnRate: '',
+                    duration: '',
+                    risk: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Investment
+              </button>
+
+              {/* Real Estate */}
+              <h3 className='font-medium text-gray-800 mb-3 flex items-center gap-2'>
+                <MdOutlineRealEstateAgent /> Real Estate
+              </h3>
+              {formData.assets.realEstate.map((property, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Property Name*
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={property.name}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'realEstate',
+                            { name: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Current Value (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={property.balance}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'realEstate',
+                            { balance: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Type*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={property.type}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'realEstate',
+                            { type: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select type</option>
+                        <option value='residential'>Residential</option>
+                        <option value='commercial'>Commercial</option>
+                        <option value='land'>Land</option>
+                        <option value='other'>Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Location
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={property.location}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'realEstate',
+                            { location: e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Rental Income (₹/month)
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={property.rentalIncome}
+                        onChange={e =>
+                          handleChange(
+                            'assets',
+                            'realEstate',
+                            { rentalIncome: e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  {formData.assets.realEstate.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() => removeItem('assets', 'realEstate', index)}
+                    >
+                      <FiTrash2 size={14} /> Remove Property
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2'
+                onClick={() =>
+                  addItem('assets', 'realEstate', {
+                    name: '',
+                    balance: '',
+                    type: '',
+                    location: '',
+                    rentalIncome: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Property
+              </button>
+            </div>
+
+            {/* Liabilities Section */}
+            <div className='mb-8 p-4 border border-gray-200 rounded-lg'>
+              <h2 className='text-xl font-semibold flex items-center gap-2 mb-4 text-indigo-600'>
+                <FiHome /> Liabilities
+              </h2>
+
+              {/* Loans */}
+              <h3 className='font-medium text-gray-800 mb-3'>Loans</h3>
+              {formData.liabilities.loans.map((loan, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Loan Type*
+                      </label>
+                      <select
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.type}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { type: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      >
+                        <option value=''>Select type</option>
+                        <option value='home'>Home Loan</option>
+                        <option value='auto'>Auto Loan</option>
+                        <option value='personal'>Personal Loan</option>
+                        <option value='education'>Education Loan</option>
+                        <option value='other'>Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Outstanding Balance (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.balance}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { balance: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Interest Rate (%)*
+                      </label>
+                      <input
+                        type='number'
+                        step='0.1'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.interestRate}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { interestRate: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Tenure (months)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.tenure}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { tenure: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        EMI (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.emi}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { emi: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Start Date
+                      </label>
+                      <input
+                        type='date'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={loan.startDate}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'loans',
+                            { startDate: e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  {formData.liabilities.loans.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() => removeItem('liabilities', 'loans', index)}
+                    >
+                      <FiTrash2 size={14} /> Remove Loan
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2 mb-6'
+                onClick={() =>
+                  addItem('liabilities', 'loans', {
+                    type: '',
+                    balance: '',
+                    interestRate: '',
+                    tenure: '',
+                    emi: '',
+                    startDate: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Loan
+              </button>
+
+              {/* Credit Cards */}
+              <h3 className='font-medium text-gray-800 mb-3'>Credit Cards</h3>
+              {formData.liabilities.creditCards.map((card, index) => (
+                <div key={index} className='mb-4 p-3 bg-gray-50 rounded-md'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-2'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Issuer*
+                      </label>
+                      <input
+                        type='text'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={card.issuer}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'creditCards',
+                            { issuer: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Credit Limit (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={card.limit}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'creditCards',
+                            { limit: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Outstanding (₹)*
+                      </label>
+                      <input
+                        type='number'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={card.outstanding}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'creditCards',
+                            { outstanding: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Due Date (day of month)*
+                      </label>
+                      <input
+                        type='number'
+                        min='1'
+                        max='31'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={card.dueDate}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'creditCards',
+                            { dueDate: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Interest Rate (%)*
+                      </label>
+                      <input
+                        type='number'
+                        step='0.1'
+                        className='w-full p-2 border border-gray-300 rounded-md'
+                        value={card.interestRate}
+                        onChange={e =>
+                          handleChange(
+                            'liabilities',
+                            'creditCards',
+                            { interestRate: e.target.value },
+                            index
+                          )
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                  {formData.liabilities.creditCards.length > 1 && (
+                    <button
+                      type='button'
+                      className='text-red-500 text-sm flex items-center gap-1'
+                      onClick={() =>
+                        removeItem('liabilities', 'creditCards', index)
+                      }
+                    >
+                      <FiTrash2 size={14} /> Remove Card
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type='button'
+                className='text-indigo-600 text-sm flex items-center gap-1 mt-2'
+                onClick={() =>
+                  addItem('liabilities', 'creditCards', {
+                    issuer: '',
+                    limit: '',
+                    outstanding: '',
+                    dueDate: '',
+                    interestRate: ''
+                  })
+                }
+              >
+                <FiPlus size={14} /> Add Another Credit Card
+              </button>
+            </div>
+
+            {/* Credit Score Section */}
+            <div className='mb-8 p-4 border border-gray-200 rounded-lg'>
+              <h2 className='text-xl font-semibold flex items-center gap-2 mb-4 text-indigo-600'>
+                <FiCreditCard /> Credit Score
+              </h2>
+
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                    Credit Score
+                  </label>
+                  <input
+                    type='number'
+                    min='300'
+                    max='900'
+                    className='w-full p-2 border border-gray-300 rounded-md'
+                    value={formData.creditScore.value}
+                    onChange={e =>
+                      handleChange('creditScore', 'value', e.target.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>
+                    Last Updated
+                  </label>
+                  <input
+                    type='date'
+                    className='w-full p-2 border border-gray-300 rounded-md'
+                    value={formData.creditScore.lastUpdated}
+                    onChange={e =>
+                      handleChange('creditScore', 'lastUpdated', e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
 
             <div className='flex justify-end gap-4 mt-8'>
               <button
