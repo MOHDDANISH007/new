@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const WelcomeSection = ({ count, setCount }) => {
-    const navi = useNavigate()
+  const navi = useNavigate()
+
   return (
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-200 p-6'>
       <motion.div
@@ -22,7 +23,10 @@ const WelcomeSection = ({ count, setCount }) => {
 
         <div className='flex justify-center space-x-4'>
           <button
-            onClick={navi('document') || setCount(count + 1)}
+            onClick={() => {
+              setCount(count + 1)
+              navi('/document')
+            }}
             className='bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full shadow-lg transition duration-300 transform hover:scale-105'
           >
             Get Started
