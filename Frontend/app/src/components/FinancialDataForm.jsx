@@ -9,7 +9,7 @@ import {
   FiTrash2
 } from 'react-icons/fi'
 import { MdOutlineRealEstateAgent, MdAccountBalance } from 'react-icons/md'
-import Link from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const FinancialDataForm = () => {
   const navigate = useNavigate()
