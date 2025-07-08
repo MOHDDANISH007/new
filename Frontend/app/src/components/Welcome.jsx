@@ -6,6 +6,11 @@ import { FaRobot } from 'react-icons/fa'
 const WelcomeSection = ({ count, setCount }) => {
   const navi = useNavigate()
 
+  // take him to top
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to the top with smooth animation
+  }, []);
+
   return (
     <div className='relative flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-300 p-4 sm:p-6'>
       {/* Background Icon */}
