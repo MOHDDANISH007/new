@@ -18,6 +18,7 @@ import {
   MdAccountBalance
 } from 'react-icons/md'
 import { motion } from 'framer-motion'
+import Link from 'react-router-dom'
 
 const Setting = () => {
   const { financialData } = useFinancial()
