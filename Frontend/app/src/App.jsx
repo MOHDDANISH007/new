@@ -10,7 +10,8 @@ const App = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
       <SiderBar isAuthenticated={!!user} />
-      {!user && <WelcomeSection />}
+      {/* if user exist then only show the welcome section */}
+      {user && <WelcomeSection />}  
       {/* Main Content Area */}
       <div className={user ? 'lg:ml-64' : ''}>
         <div className='min-h-screen flex items-center justify-center p-4'>
