@@ -12,7 +12,7 @@ const App = () => {
 
   // Redirect to "/" after login, but NOT if already on another route like "/document"
   useEffect(() => {
-    if (user && location.pathname === '/login') {
+    if (!user && location.pathname === '/login') {
       navigate('/')
     }
   }, [user, location.pathname, navigate])
