@@ -4,6 +4,7 @@ import SiderBar from './components/SiderBar'
 import { Outlet } from 'react-router-dom'
 import { useAuth } from './context/Auth.context'
 import WelcomeSection from './components/Welcome'
+import { motion } from 'framer-motion'
 
 const App = () => {
   const { user } = useAuth()
