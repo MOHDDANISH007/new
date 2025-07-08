@@ -18,13 +18,14 @@ import {
   MdAccountBalance
 } from 'react-icons/md'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom' // ✅ CORRECT
+import { Link, useNavigate  } from 'react-router-dom' // ✅ CORRECT
 
 
 const Setting = () => {
   const { financialData } = useFinancial()
   const { user } = useAuth()
   const [activeTab, setActiveTab] = React.useState('overview')
+  const navigate = useNavigate()
 
   const formatCurrency = amount => {
     return new Intl.NumberFormat('en-IN', {
@@ -32,6 +33,10 @@ const Setting = () => {
       currency: 'INR',
       maximumFractionDigits: 0
     }).format(amount || 0)
+  }
+
+  const handleAddFinancialData = () => {
+    navigate('form')
   }
 
   const formatDate = dateString => {
@@ -116,11 +121,12 @@ const Setting = () => {
             We couldn't find any financial data associated with your account.
             Please add your financial information to get started.
           </p>
-          <Link to='form'>
-            <button className='bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition'>
-              Add Financial Data
-            </button>
-          </Link>
+          <button
+            onClick={handleAddFinancialData}
+            className='bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition'
+          >
+            Add Financial Data
+          </button>
         </div>
       </div>
     )
