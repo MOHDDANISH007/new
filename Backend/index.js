@@ -15,7 +15,10 @@ const app = express()
 
 app.use(
   cors({
-    origin: ['https://localhost:5173', 'https://new-frontend-ax82.onrender.com'],
+    origin: [
+      'https://localhost:5173',
+      'https://new-frontend-ax82.onrender.com'
+    ],
     credentials: true
   })
 )

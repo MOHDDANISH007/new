@@ -10,6 +10,9 @@ import {
 } from 'react-icons/fi'
 import { MdOutlineRealEstateAgent, MdAccountBalance } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import axios from 'axios'
+
 
 const FinancialDataForm = () => {
   const navigate = useNavigate()
@@ -118,7 +121,7 @@ const FinancialDataForm = () => {
 
     try {
       const response = await axios.post(
-        `https://new-backend-w5z3.onrender.com/financial/manual-create-financial-data?userId=${user._id}`,
+        `${BASE_URL}/financial/manual-create-financial-data?userId=${user._id}`,
         formData,
         {
           withCredentials: true,
