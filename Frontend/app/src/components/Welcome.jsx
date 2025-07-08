@@ -25,12 +25,6 @@ const WelcomeSection = ({ count, setCount }) => {
           >
             Get Started
           </button>
-          <button
-            onClick={() => window.location.reload()}
-            className='bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-full shadow-md transition duration-300 transform hover:scale-105'
-          >
-            Refresh Before Start
-          </button>
         </div>
       </motion.div>
     </div>
