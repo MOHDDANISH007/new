@@ -9,8 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret'
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: false, // TEMP: disable secure in local
-  sameSite: 'lax', // TEMP: disable secure in local
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   path: '/',
   maxAge: 24 * 60 * 60 * 1000
 }

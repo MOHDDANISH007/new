@@ -64,7 +64,6 @@ export const AuthProvider = ({ children }) => {
 
       await fetchUser()
       navigate('/document', { replace: true })
-      window.location.reload()
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed')
     } finally {
@@ -86,7 +85,6 @@ export const AuthProvider = ({ children }) => {
 
       await fetchUser()
       navigate('/document', { replace: true })
-      window.location.reload()
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed')
     } finally {
