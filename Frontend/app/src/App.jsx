@@ -12,7 +12,7 @@ const App = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100'>
       <SiderBar isAuthenticated={!!user} />
-      {count === 0 && (
+      {user && count === 0 && (
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
