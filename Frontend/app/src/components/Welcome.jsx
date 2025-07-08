@@ -22,7 +22,7 @@ const WelcomeSection = ({ count, setCount }) => {
 
         <div className='flex justify-center space-x-4'>
           <button
-            onClick={navi('/document') || setCount(count + 1)}
+            onClick={navi('document') || setCount(count + 1)}
             className='bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full shadow-lg transition duration-300 transform hover:scale-105'
           >
             Get Started
