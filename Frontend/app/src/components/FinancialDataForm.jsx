@@ -12,10 +12,11 @@ import { MdOutlineRealEstateAgent, MdAccountBalance } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import axios from 'axios'
-
+import { useAuth } from '../context/Auth.context'
 
 const FinancialDataForm = () => {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const BASE_URL = 'https://new-backend-w5z3.onrender.com'
